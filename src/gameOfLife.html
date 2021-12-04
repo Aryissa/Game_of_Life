@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game of life</title>
+</head>
+<style>
+    table, tr, td {
+        border: 1px solid black;
+    }
+    td {
+        width: 40px;
+        height: 40px;
+        color: rebeccapurple;
+        font-family: "DejaVu Sans";
+        align-content: center;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 40px;
+    }
+    #gameOfLifeContainer {
+        margin-top: 15px;
+        padding: 15px;
+    }
+</style>
+<script type="text/javascript">
+var gameOfLife = new Map();
+var liveValue = 'X';
+var deadValue= '';
+
+    function setValeur(cle, valeur) {
+        document.getElementById(cle).innerText= valeur;
+    }
+
+    function init(){
+
+            gameOfLife.set(11, '');
+            gameOfLife.set(12, '');
+            gameOfLife.set(13, '');
+            gameOfLife.set(14, '');
+            gameOfLife.set(15, '');
+            gameOfLife.set(16, '');
+            gameOfLife.set(17, '');
+            gameOfLife.set(18, '');
+
+            gameOfLife.set(21, '');
+            gameOfLife.set(22, '');
+            gameOfLife.set(23, 'X');
+            gameOfLife.set(24, 'X');
+            gameOfLife.set(25, 'X');
+            gameOfLife.set(26, '');
+            gameOfLife.set(27, '');
+            gameOfLife.set(28, '');
+
+            gameOfLife.set(31, '');
+            gameOfLife.set(32, 'X');
+            gameOfLife.set(33, 'X');
+            gameOfLife.set(34, 'X');
+            gameOfLife.set(35, '');
+            gameOfLife.set(36, '');
+            gameOfLife.set(37, '');
+            gameOfLife.set(38, '');
+
+            gameOfLife.set(41, '');
+            gameOfLife.set(42, '');
+            gameOfLife.set(43, '');
+            gameOfLife.set(44, '');
+            gameOfLife.set(45, '');
+            gameOfLife.set(46, '');
+            gameOfLife.set(47, '');
+            gameOfLife.set(48, '');
+
+            gameOfLife.forEach((valeur, cle) => {
+                setValeur(cle, valeur)
+               }
+            );
+    }
+
+    function recupererValeur(cle){
+        return gameOfLife.get(cle);
+    }
+
+    function listerVoisins(cle){
+        return [
+            cle-11, cle-10 ,cle-9,
+            cle-1, cle+1,
+            cle+9, cle+10, cle+11
+        ];
+    }
+
+    function getVoisinsVivant(cle){
+        return listerVoisins(cle)
+                .map(cleVoisin => recupererValeur(cleVoisin))
+                .filter(valeurVoisin => liveValue === valeurVoisin)
+                .length;
+    }
+
+    function isAlive(valeur) {
+        return valeur ===  liveValue;
+    }
+    function isDead(valeur) {
+        return valeur ===  deadValue;
+    }
+
+    function generation(){
+        gameOfLife.forEach((valeur, cle) => {
+            // regle 4
+            if(getVoisinsVivant(cle)==3 && isDead(valeur)){
+                setValeur(cle, liveValue);
+            }
+
+            //regle 1
+            if(getVoisinsVivant(cle)<2 && isAlive(valeur)){
+                setValeur(cle, deadValue);
+            }
+
+            //regle 2 :  Any live cell with more than three live neighbours dies, as if by overcrowding.
+            if(getVoisinsVivant(cle)>3 && isAlive(valeur)){
+                setValeur(cle, deadValue);
+            }
+
+            //regle 3
+            if((getVoisinsVivant(cle)===3 || getVoisinsVivant(cle)===2) &&  isAlive(valeur)){
+                setValeur(cle, liveValue);
+            }
+
+
+        });
+    }
+</script>
+
+<body>
+    <input type = "button" onclick = "init()" value = "Reset">
+    <input type = "button" onclick = "generation()" value = "next_g">
+    <div id="gameOfLifeContainer">
+        <table style="border 1px solid black;">
+            <tr><td id="11"></td><td id="12"></td><td id="13"></td><td id="14"></td><td id="15"></td><td id="16"></td><td id="17"></td><td id="18"></td></tr>
+            <tr><td id="21"></td><td id="22"></td><td id="23"></td><td id="24"></td><td id="25"></td><td id="26"></td><td id="27"></td><td id="28"></td></tr>
+            <tr><td id="31"></td><td id="32"></td><td id="33"></td><td id="34"></td><td id="35"></td><td id="36"></td><td id="37"></td><td id="38"></td></tr>
+            <tr><td id="41"></td><td id="42"></td><td id="43"></td><td id="44"></td><td id="45"></td><td id="46"></td><td id="47"></td><td id="48"></td></tr>
+        </table>
+    </div>
+</body>
+</html>
