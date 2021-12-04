@@ -5,9 +5,6 @@
     <title>Game of life</title>
 </head>
 <style>
-    table, tr, td {
-        border: 1px solid black;
-    }
     td {
         width: 40px;
         height: 40px;
@@ -16,8 +13,13 @@
         align-content: center;
         vertical-align: middle;
         text-align: center;
-        font-size: 40px;
+        font-size: 35px;
+        border-radius: 15px;
     }
+    .alive {
+        background-color: rebeccapurple;
+    }
+
     #gameOfLifeContainer {
         margin-top: 15px;
         padding: 15px;
@@ -29,46 +31,76 @@ var liveValue = 'X';
 var deadValue= '';
 
     function setValeur(cle, valeur) {
-        document.getElementById(cle).innerText= valeur;
+        gameOfLife.set(cle, valeur);
+        if(document.getElementById(cle) && valeur === liveValue) {
+            document.getElementById(cle).classList.add('alive');
+        }
+        if(document.getElementById(cle) && valeur === deadValue) {
+            document.getElementById(cle).classList.remove('alive');
+        }
     }
 
     function init(){
 
-            gameOfLife.set(11, '');
-            gameOfLife.set(12, '');
-            gameOfLife.set(13, '');
-            gameOfLife.set(14, '');
-            gameOfLife.set(15, '');
-            gameOfLife.set(16, '');
-            gameOfLife.set(17, '');
-            gameOfLife.set(18, '');
+            for (var i = 0; i<2000; i++) {
+                gameOfLife.set(i, deadValue);
+            }
+            console.warn("Taille", gameOfLife.size);
 
-            gameOfLife.set(21, '');
-            gameOfLife.set(22, '');
-            gameOfLife.set(23, 'X');
-            gameOfLife.set(24, 'X');
-            gameOfLife.set(25, 'X');
-            gameOfLife.set(26, '');
-            gameOfLife.set(27, '');
-            gameOfLife.set(28, '');
+            gameOfLife.set(305, 'X');
+            gameOfLife.set(306, 'X');
+            gameOfLife.set(307, 'X');
+            gameOfLife.set(311, 'X');
+            gameOfLife.set(312, 'X');
+            gameOfLife.set(313, 'X');
 
-            gameOfLife.set(31, '');
-            gameOfLife.set(32, 'X');
-            gameOfLife.set(33, 'X');
-            gameOfLife.set(34, 'X');
-            gameOfLife.set(35, '');
-            gameOfLife.set(36, '');
-            gameOfLife.set(37, '');
-            gameOfLife.set(38, '');
+            gameOfLife.set(503, 'X');
+            gameOfLife.set(508, 'X');
+            gameOfLife.set(510, 'X');
+            gameOfLife.set(515, 'X');
+            gameOfLife.set(603, 'X');
+            gameOfLife.set(608, 'X');
+            gameOfLife.set(610, 'X');
+            gameOfLife.set(615, 'X');
+            gameOfLife.set(703, 'X');
+            gameOfLife.set(708, 'X');
+            gameOfLife.set(710, 'X');
+            gameOfLife.set(715, 'X');
 
-            gameOfLife.set(41, '');
-            gameOfLife.set(42, '');
-            gameOfLife.set(43, '');
-            gameOfLife.set(44, '');
-            gameOfLife.set(45, '');
-            gameOfLife.set(46, '');
-            gameOfLife.set(47, '');
-            gameOfLife.set(48, '');
+            gameOfLife.set(805, 'X');
+            gameOfLife.set(806, 'X');
+            gameOfLife.set(807, 'X');
+            gameOfLife.set(811, 'X');
+            gameOfLife.set(812, 'X');
+            gameOfLife.set(813, 'X');
+
+
+            gameOfLife.set(1005, 'X');
+            gameOfLife.set(1006, 'X');
+            gameOfLife.set(1007, 'X');
+            gameOfLife.set(1011, 'X');
+            gameOfLife.set(1012, 'X');
+            gameOfLife.set(1013, 'X');
+
+            gameOfLife.set(1103, 'X');
+            gameOfLife.set(1108, 'X');
+            gameOfLife.set(1110, 'X');
+            gameOfLife.set(1115, 'X');
+            gameOfLife.set(1203, 'X');
+            gameOfLife.set(1208, 'X');
+            gameOfLife.set(1210, 'X');
+            gameOfLife.set(1215, 'X');
+            gameOfLife.set(1303, 'X');
+            gameOfLife.set(1308, 'X');
+            gameOfLife.set(1310, 'X');
+            gameOfLife.set(1315, 'X');
+
+            gameOfLife.set(1505, 'X');
+            gameOfLife.set(1506, 'X');
+            gameOfLife.set(1507, 'X');
+            gameOfLife.set(1511, 'X');
+            gameOfLife.set(1512, 'X');
+            gameOfLife.set(1513, 'X');
 
             gameOfLife.forEach((valeur, cle) => {
                 setValeur(cle, valeur)
@@ -82,13 +114,18 @@ var deadValue= '';
 
     function listerVoisins(cle){
         return [
-            cle-11, cle-10 ,cle-9,
+            cle-101, cle-100 ,cle-99,
             cle-1, cle+1,
-            cle+9, cle+10, cle+11
+            cle+99, cle+100, cle+101
         ];
     }
 
     function getVoisinsVivant(cle){
+        if(cle === 206) {
+            console.log(listerVoisins(cle))
+            console.log(listerVoisins(cle)
+                    .map(cleVoisin => recupererValeur(cleVoisin)))
+        }
         return listerVoisins(cle)
                 .map(cleVoisin => recupererValeur(cleVoisin))
                 .filter(valeurVoisin => liveValue === valeurVoisin)
@@ -103,41 +140,61 @@ var deadValue= '';
     }
 
     function generation(){
+        changedCell = new Map();
         gameOfLife.forEach((valeur, cle) => {
             // regle 4
             if(getVoisinsVivant(cle)==3 && isDead(valeur)){
-                setValeur(cle, liveValue);
+                changedCell.set(cle, liveValue);
             }
 
             //regle 1
             if(getVoisinsVivant(cle)<2 && isAlive(valeur)){
-                setValeur(cle, deadValue);
+                 changedCell.set(cle, deadValue);
             }
 
             //regle 2 :  Any live cell with more than three live neighbours dies, as if by overcrowding.
             if(getVoisinsVivant(cle)>3 && isAlive(valeur)){
-                setValeur(cle, deadValue);
+                 changedCell.set(cle, deadValue);
             }
 
             //regle 3
             if((getVoisinsVivant(cle)===3 || getVoisinsVivant(cle)===2) &&  isAlive(valeur)){
-                setValeur(cle, liveValue);
+                 changedCell.set(cle, liveValue);
             }
-
-
         });
+
+        changedCell.forEach((valeur, cle) => setValeur(cle, valeur));
+    }
+
+    function generationAuto() {
+      init();
+      setInterval(generation, 1000);
     }
 </script>
 
 <body>
     <input type = "button" onclick = "init()" value = "Reset">
     <input type = "button" onclick = "generation()" value = "next_g">
+    <input type = "button" onclick = "generationAuto()" value = "AUTO">
     <div id="gameOfLifeContainer">
         <table style="border 1px solid black;">
-            <tr><td id="11"></td><td id="12"></td><td id="13"></td><td id="14"></td><td id="15"></td><td id="16"></td><td id="17"></td><td id="18"></td></tr>
-            <tr><td id="21"></td><td id="22"></td><td id="23"></td><td id="24"></td><td id="25"></td><td id="26"></td><td id="27"></td><td id="28"></td></tr>
-            <tr><td id="31"></td><td id="32"></td><td id="33"></td><td id="34"></td><td id="35"></td><td id="36"></td><td id="37"></td><td id="38"></td></tr>
-            <tr><td id="41"></td><td id="42"></td><td id="43"></td><td id="44"></td><td id="45"></td><td id="46"></td><td id="47"></td><td id="48"></td></tr>
+            <tr><td id="101"></td><td id="102"></td><td id="103"></td><td id="104"></td><td id="105"></td><td id="106"></td><td id="107"></td><td id="108"></td><td id="109"></td><td id="110"></td><td id="111"></td><td id="112"></td><td id="113"></td><td id="114"></td><td id="115"></td><td id="116"></td><td id="117"></td></tr>
+            <tr><td id="201"></td><td id="202"></td><td id="203"></td><td id="204"></td><td id="205"></td><td id="206"></td><td id="207"></td><td id="208"></td><td id="209"></td><td id="210"></td><td id="211"></td><td id="212"></td><td id="213"></td><td id="214"></td><td id="215"></td><td id="216"></td><td id="217"></td></tr>
+            <tr><td id="301"></td><td id="302"></td><td id="303"></td><td id="304"></td><td id="305"></td><td id="306"></td><td id="307"></td><td id="308"></td><td id="309"></td><td id="310"></td><td id="311"></td><td id="312"></td><td id="313"></td><td id="314"></td><td id="315"></td><td id="316"></td><td id="317"></td></tr>
+            <tr><td id="401"></td><td id="402"></td><td id="403"></td><td id="404"></td><td id="405"></td><td id="406"></td><td id="407"></td><td id="408"></td><td id="409"></td><td id="410"></td><td id="411"></td><td id="412"></td><td id="413"></td><td id="414"></td><td id="415"></td><td id="416"></td><td id="417"></td></tr>
+            <tr><td id="501"></td><td id="502"></td><td id="503"></td><td id="504"></td><td id="505"></td><td id="506"></td><td id="507"></td><td id="508"></td><td id="509"></td><td id="510"></td><td id="511"></td><td id="512"></td><td id="513"></td><td id="514"></td><td id="515"></td><td id="516"></td><td id="517"></td></tr>
+            <tr><td id="601"></td><td id="602"></td><td id="603"></td><td id="604"></td><td id="605"></td><td id="606"></td><td id="607"></td><td id="608"></td><td id="609"></td><td id="610"></td><td id="611"></td><td id="612"></td><td id="613"></td><td id="614"></td><td id="615"></td><td id="616"></td><td id="617"></td></tr>
+            <tr><td id="701"></td><td id="702"></td><td id="703"></td><td id="704"></td><td id="705"></td><td id="706"></td><td id="707"></td><td id="708"></td><td id="709"></td><td id="710"></td><td id="711"></td><td id="712"></td><td id="713"></td><td id="714"></td><td id="715"></td><td id="716"></td><td id="717"></td></tr>
+            <tr><td id="801"></td><td id="802"></td><td id="803"></td><td id="804"></td><td id="805"></td><td id="806"></td><td id="807"></td><td id="808"></td><td id="809"></td><td id="810"></td><td id="811"></td><td id="812"></td><td id="813"></td><td id="814"></td><td id="815"></td><td id="816"></td><td id="817"></td></tr>
+            <tr><td id="901"></td><td id="902"></td><td id="903"></td><td id="904"></td><td id="905"></td><td id="906"></td><td id="907"></td><td id="908"></td><td id="909"></td><td id="910"></td><td id="911"></td><td id="912"></td><td id="913"></td><td id="914"></td><td id="915"></td><td id="916"></td><td id="917"></td></tr>
+            <tr><td id="1001"></td><td id="1002"></td><td id="1003"></td><td id="1004"></td><td id="1005"></td><td id="1006"></td><td id="1007"></td><td id="1008"></td><td id="1009"></td><td id="1010"></td><td id="1011"></td><td id="1012"></td><td id="1013"></td><td id="1014"></td><td id="1015"></td><td id="1016"></td><td id="1017"></td></tr>
+            <tr><td id="1101"></td><td id="1102"></td><td id="1103"></td><td id="1104"></td><td id="1105"></td><td id="1106"></td><td id="1107"></td><td id="1108"></td><td id="1109"></td><td id="1110"></td><td id="1111"></td><td id="1112"></td><td id="1113"></td><td id="1114"></td><td id="1115"></td><td id="1116"></td><td id="1117"></td></tr>
+            <tr><td id="1201"></td><td id="1202"></td><td id="1203"></td><td id="1204"></td><td id="1205"></td><td id="1206"></td><td id="1207"></td><td id="1208"></td><td id="1209"></td><td id="1210"></td><td id="1211"></td><td id="1212"></td><td id="1213"></td><td id="1214"></td><td id="1215"></td><td id="1216"></td><td id="1217"></td></tr>
+            <tr><td id="1301"></td><td id="1302"></td><td id="1303"></td><td id="1304"></td><td id="1305"></td><td id="1306"></td><td id="1307"></td><td id="1308"></td><td id="1309"></td><td id="1310"></td><td id="1311"></td><td id="1312"></td><td id="1313"></td><td id="1314"></td><td id="1315"></td><td id="1316"></td><td id="1317"></td></tr>
+            <tr><td id="1401"></td><td id="1402"></td><td id="1403"></td><td id="1404"></td><td id="1405"></td><td id="1406"></td><td id="1407"></td><td id="1408"></td><td id="1409"></td><td id="1410"></td><td id="1411"></td><td id="1412"></td><td id="1413"></td><td id="1414"></td><td id="1415"></td><td id="1416"></td><td id="1417"></td></tr>
+            <tr><td id="1501"></td><td id="1502"></td><td id="1503"></td><td id="1504"></td><td id="1505"></td><td id="1506"></td><td id="1507"></td><td id="1508"></td><td id="1509"></td><td id="1510"></td><td id="1511"></td><td id="1512"></td><td id="1513"></td><td id="1514"></td><td id="1515"></td><td id="1516"></td><td id="1517"></td></tr>
+            <tr><td id="1601"></td><td id="1602"></td><td id="1603"></td><td id="1604"></td><td id="1605"></td><td id="1606"></td><td id="1607"></td><td id="1608"></td><td id="1609"></td><td id="1610"></td><td id="1611"></td><td id="1612"></td><td id="1613"></td><td id="1614"></td><td id="1615"></td><td id="1616"></td><td id="1617"></td></tr>
+            <tr><td id="1701"></td><td id="1702"></td><td id="1703"></td><td id="1704"></td><td id="1705"></td><td id="1706"></td><td id="1707"></td><td id="1708"></td><td id="1709"></td><td id="1710"></td><td id="1711"></td><td id="1712"></td><td id="1713"></td><td id="1714"></td><td id="1715"></td><td id="1716"></td><td id="1717"></td></tr>
         </table>
     </div>
 </body>
